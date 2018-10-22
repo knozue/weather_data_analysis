@@ -1,0 +1,92 @@
+---
+title: "draft for weather and R"
+author: "Kazu"
+date: "10/19/2018"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r eval=FALSE,error=TRUE,message=TRUE}
+library(riem);library(tidyverse);library(lubridate)
+riem_networks() 
+stations<-riem_stations(network = "IN__ASOS") 
+stations<-riem_stations(network = "CA_ASOS") #CA
+stations %>% View()
+stations %>% filter(id=="SFO")
+stations %>% filter(id=="SMF")
+
+```
+# test
+```{r,error=TRUE,message=TRUE}
+measures2 <- riem_measures(station = "SMF", date_start = "2013-01-01", date_end = "2018-10-18") 
+# extract year and facet_grid()
+measures2 %>% mutate(year=year(valid),m=month(valid),d=day(valid),md=format(valid,"%m/%d")) %>%  ggplot(aes(x=md,y=tmpf)) + geom_line() + facet_wrap(~year,nrow=3)
+
+measures3 <- riem_measures(station = "SAC", date_start = "2013-01-01", date_end = "2018-10-18") 
+# extract year and facet_grid()
+measures3 %>% mutate(year=year(valid),m=month(valid),d=day(valid),md=format(valid,"%m/%d")) %>%  ggplot(aes(x=md,y=tmpf)) + geom_line() + facet_wrap(~year,nrow=3)
+
+```
+# weathercan
+```{r eval=FALSE,error=TRUE,message=TRUE}
+library(weahtercan)
+# Data manipulation and plotting
+library(dplyr)
+library(ggplot2)
+# Checking data completeness
+library(naniar)
+# Access to data containing feeder visits by birds
+## cf. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5632613/
+#install.packages("devtools")
+#devtools::install_github("animalnexus/feedr")
+library(feedr)
+
+# Spatial analyses
+#library(sf) # unable to install
+#slibrary(mapview)
+stations_search()
+head(stations)
+View(stations) # only canada
+stations_search("Kamloops")
+mb <- filter(stations, 
+             prov == "MB",
+             interval == "day",
+             end >= 2018) %>%
+  select(-prov, -climate_id, -WMO_id, -TC_id)
+mb
+```
+# rnoaa https://recology.info/2015/07/weather-data-with-rnoaa/
+```{r eval=FALSE,error=TRUE,message=TRUE}
+devtools::install_github("ropensci/rnoaa")
+library("rnoaa");library("lawn");library("sp");library(tidyverse)
+ncdc(datasetid = 'GHCND', stationid = 'GHCND:USW00014895', startdate = '2013-10-01',
+   enddate = '2013-12-01',token="IgkQXPpTaQBbkaLZZRkNUkuEOzkVpNpv")
+library("lawn")
+lawn_bbox_polygon(c(-122.2047, 47.5204, -122.1065, 47.6139)) %>% view
+
+```
+# https://github.com/ALShum/rwunderground
+```{r eval=FALSE,error=TRUE,message=TRUE}
+library(rwunderground)
+set_api_key()
+
+```
+
+# www.wunerground.com
+```{r eval=FALSE, ,error=TRUE,message=TRUE}
+library(devtools)
+install_github("Ram-N/weatherData")
+library(weatherData)
+checkDataAvailability("HECA", "2014-01-01")
+checkDataAvailabilityForDateRange("SFO", "2010-10-29", "2013-01-12")
+data(London2013)
+getStationCode("Buffalo")
+getWeatherForDate("SEA", "2014-05-05")
+getStationCode("Sacramento")
+getStationCode("SEA")
+
+getWeatherForDate("SAC", "2014-05-05")
+getWeatherForDate("SMF", "2014-05-05")
+
+```
