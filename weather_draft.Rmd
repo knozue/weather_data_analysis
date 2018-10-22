@@ -7,7 +7,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r eval=FALSE,error=TRUE,message=TRUE}
+```{r eval=TRUE,error=TRUE,message=TRUE}
 library(riem);library(tidyverse);library(lubridate)
 riem_networks() 
 stations<-riem_stations(network = "IN__ASOS") 
@@ -18,7 +18,7 @@ stations %>% filter(id=="SMF")
 
 ```
 # test
-```{r,error=TRUE,message=TRUE}
+```{r eval=TRUE, error=TRUE,message=TRUE}
 measures2 <- riem_measures(station = "SMF", date_start = "2013-01-01", date_end = "2018-10-18") 
 # extract year and facet_grid()
 measures2 %>% mutate(year=year(valid),m=month(valid),d=day(valid),md=format(valid,"%m/%d")) %>%  ggplot(aes(x=md,y=tmpf)) + geom_line() + facet_wrap(~year,nrow=3)
@@ -29,7 +29,7 @@ measures3 %>% mutate(year=year(valid),m=month(valid),d=day(valid),md=format(vali
 
 ```
 # weathercan
-```{r eval=FALSE,error=TRUE,message=TRUE}
+```{r eval=TRUE,error=TRUE,message=TRUE}
 library(weahtercan)
 # Data manipulation and plotting
 library(dplyr)
@@ -57,7 +57,7 @@ mb <- filter(stations,
 mb
 ```
 # rnoaa https://recology.info/2015/07/weather-data-with-rnoaa/
-```{r eval=FALSE,error=TRUE,message=TRUE}
+```{r eval=TRUE,error=TRUE,message=TRUE}
 devtools::install_github("ropensci/rnoaa")
 library("rnoaa");library("lawn");library("sp");library(tidyverse)
 ncdc(datasetid = 'GHCND', stationid = 'GHCND:USW00014895', startdate = '2013-10-01',
@@ -74,7 +74,7 @@ set_api_key()
 ```
 
 # www.wunerground.com
-```{r eval=FALSE, ,error=TRUE,message=TRUE}
+```{r eval=TRUE, ,error=TRUE,message=TRUE}
 library(devtools)
 install_github("Ram-N/weatherData")
 library(weatherData)
